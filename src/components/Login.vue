@@ -17,7 +17,7 @@
         <!-- 登录按钮 -->
         <el-form-item>
             <el-button type="primary">登录</el-button>
-            <el-button>重置</el-button>
+            <el-button @click='reset'>重置</el-button>
         </el-form-item>
         </el-form>
     </div>
@@ -56,7 +56,11 @@ export default {
     }
   },
   methods: {
-    //
+    // 重置表单
+    reset() {
+      // 获取表单组件,调用resetFields
+      this.$refs.form.resetFields()
+    }
   }
 }
 </script>
