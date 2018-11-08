@@ -16,7 +16,7 @@
         </el-form-item>
         <!-- 登录按钮 -->
         <el-form-item>
-            <el-button type="primary">登录</el-button>
+            <el-button @click="login" type="primary">登录</el-button>
             <el-button @click='reset'>重置</el-button>
         </el-form-item>
         </el-form>
@@ -36,15 +36,15 @@ export default {
       rules: {
         // 对username进行校验
         username: [
-          //必填项
+          // 必填项
           { required: true, message: '请输入用户名', trigger: 'change' },
-          //校验长度
+          // 校验长度
           { min: 3, max: 9, message: '长度在 3 到 9 个字符', trigger: 'change' }
         ],
         password: [
-          //必填项
+          // 必填项
           { required: true, message: '请输入用户名', trigger: 'change' },
-          //校验长度
+          // 校验长度
           {
             min: 6,
             max: 12,
@@ -60,6 +60,37 @@ export default {
     reset() {
       // 获取表单组件,调用resetFields
       this.$refs.form.resetFields()
+    },
+    // 登录
+    login() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          // 校验通过
+          //   console.log('校验通过')
+          // 发送ajax请求
+          axios({
+            url: 'http://localhost:8888/api/private/v1/login',
+            method: 'post',
+            data: this.form
+          }).then(res => {
+            if (res.data.meta.status === 200) {
+              // 登录成功
+              this.$message.success('登录成功')
+              // 存储token
+              localStorage.setItem('token', res.data.data.token)
+              // 跳转到home组件
+              this.$router.push('/home')
+            } else {
+              // 登录失败
+              this.$message.error(res.data.meta.msg)
+            }
+          })
+        } else {
+          // 校验没通过
+          console.log('请输入正确的账号和密码')
+          return false
+        }
+      })
     }
   }
 }
