@@ -11,7 +11,7 @@
             <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密　码" prop="password">
             <el-input v-model="form.password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
         <!-- 登录按钮 -->
@@ -75,14 +75,14 @@ export default {
           }).then(res => {
             if (res.data.meta.status === 200) {
               // 登录成功
-              this.$message.success('登录成功')
+              this.$message.success('恭喜你登录成功') // 弹框提示
               // 存储token
               localStorage.setItem('token', res.data.data.token)
               // 跳转到home组件
               this.$router.push('/home')
             } else {
               // 登录失败
-              this.$message.error(res.data.meta.msg)
+              this.$message.error(res.data.meta.msg) // 弹框提示
             }
           })
         } else {
@@ -115,12 +115,12 @@ export default {
     position: relative;
 
     img {
-      width: 120px;
+      width: 110px;
       position: absolute;
-      top: -70px;
+      top: -60px;
       border-radius: 50%;
       left: 180px;
-      border: 5px solid #fff;
+      border: 10px solid #fff;
     }
     .el-button + .el-button {
       margin-left: 70px;
