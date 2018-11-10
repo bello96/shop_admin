@@ -12,93 +12,55 @@
     </el-header>
     <el-container>
         <el-aside width="200px">
-            <!-- 我是侧边栏 -->
-            <!-- el-menu: 菜单组件 -->
-            <!-- default-active：默认选中的菜单 -->
-            <!-- el-submenu: 子菜单 -->
-            <!-- template：表示子菜单的内容 -->
-            <!-- el-menu-item-group： 子菜单的分组 -->
-            <!-- el-menu-item：菜单项  -->
-            <!-- unique-opened：最多只能打开一个子菜单 -->
-            <!-- router:开启了路由模式， 当我们点击导航的时候，会发生路由的跳转, 跳转到index对应的路径 -->
-                <el-menu
-                default-active="1-1"
-                class="el-menu-vertical-demo"
-                @open="handleOpen"
-                @close="handleClose"
-                background-color="#545c64"
-                text-color="#fff"
-                active-text-color="#ffd04b"
-                unique-opened
-                router>
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>用户管理</span>
-                    </template>
-                    <el-menu-item index="1-1">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">用户列表</span>
-                    </el-menu-item>
-                </el-submenu>
-                <el-submenu index="2">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>权限管理</span>
-                    </template>
-                    <el-menu-item index="2-1">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">角色列表</span>
-                    </el-menu-item>
-                    <el-menu-item index="2-2">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">权限列表</span>
-                    </el-menu-item>
-                </el-submenu>
-                <el-submenu index="3">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>商品管理</span>
-                    </template>
-                    <el-menu-item index="3-1">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">商品列表</span>
-                    </el-menu-item>
-                    <el-menu-item index="3-2">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">分类参数</span>
-                    </el-menu-item>
-                    <el-menu-item index="3-3">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">商品分类</span>
-                    </el-menu-item>
-                </el-submenu>
-                <el-submenu index="4">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>订单管理</span>
-                    </template>
-                    <el-menu-item index="4-1">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">订单列表</span>
-                    </el-menu-item>
-                </el-submenu>
-                <el-submenu index="5">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>数据统计</span>
-                    </template>
-                    <el-menu-item index="5-1">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">数据列表</span>
-                    </el-menu-item>
-                </el-submenu>
-                </el-menu>
+        <!-- 我是侧边栏 -->
+        <!-- el-menu: 菜单组件 -->
+        <!-- default-active：默认选中的菜单 -->
+        <!-- el-submenu: 子菜单 -->
+        <!-- template：表示子菜单的内容 -->
+        <!-- el-menu-item-group： 子菜单的分组 -->
+        <!-- el-menu-item：菜单项  -->
+        <!-- unique-opened：最多只能打开一个子菜单 -->
+        <!-- router:开启了路由模式， 当我们点击导航的时候，会发生路由的跳转, 跳转到index对应的路径 -->
+            <el-menu
+            default-active="1"
+            background-color="#545c64"
+            text-color="#fff"
+            class="el-menu-vertical-demo"
+            active-text-color="#ffd04b"
+            unique-opened
+            router>
+            <el-submenu index="1">
+                <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span>用户管理</span>
+                </template>
+                <!-- 菜单项 -->
+                <el-menu-item index="/users">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">用户列表</span>
+                </el-menu-item>
+            </el-submenu>
+            <el-submenu index="2">
+                <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span>权限管理</span>
+                </template>
+                <!-- 菜单项 -->
+                <el-menu-item index="2-1">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">角色列表</span>
+                </el-menu-item>
+                <el-menu-item index="2-2">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">权限列表</span>
+                </el-menu-item>
+            </el-submenu>
+            </el-menu>
         </el-aside>
         <!-- 用户列表 -->
         <el-main>
             <!-- 配置子路由的出口 -->
-            <roeter-view></roeter-view>
+            <router-view/>
         </el-main>
     </el-container>
     </el-container>
