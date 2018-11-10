@@ -4,6 +4,12 @@ import Router from 'vue-router'
 // 导入Login组件
 import Login from '@/components/Login.vue'
 
+// 导入Home组件
+import Home from '@/components/Home.vue'
+
+// 导入users组件
+import Users from '@/components/Users.vue'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -18,7 +24,15 @@ const router = new Router({
     },
     {
       path: '/home',
-      component: Home
+      component: Home,
+      // 嵌套路由1:通过children给某个路由配置子路由
+      // 嵌套路由2: 给子路由配置一个出口
+      children: [
+        {
+          path: '/users',
+          component: Users
+        }
+      ]
     }
   ]
 })
