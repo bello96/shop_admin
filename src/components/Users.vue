@@ -48,7 +48,7 @@
                 label="操作">
                 <!-- 自定义这一列的内容，必须指定template -->
                 <template slot-scope="scope">
-                <el-button size="small" plain type="primary" icon="el-icon-edit"></el-button>
+                <el-button size="small" plain type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
                 <el-button size="small" plain type="danger" icon="el-icon-delete" @click="delUser(scope.row.id)"></el-button>
                 <el-button size="small" plain type="success" icon="el-icon-check">分配角色</el-button>
                 </template>
@@ -100,6 +100,29 @@
             <el-button type="primary" @click="addUser">确 定</el-button>
           </span>
         </el-dialog>
+
+        <!-- 修改用户的模态框 -->
+        <el-dialog
+          title="添加用户"
+          :visible.sync="editDialogVisible"
+          width="40%">
+          <el-form ref="editForm" :model="editForm" :rules="rules" status-icon label-width="80px">
+            <el-form-item label="用户名">
+              <el-tag>{{editForm.username}}</el-tag>
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input placeholder="请输入邮箱" v-model="editForm.email"></el-input>
+            </el-form-item>
+            <el-form-item label="电话" prop="mobile">
+              <el-input placeholder="请输入电话" @keyup.enter.native="editUser" v-model="editForm.mobile"></el-input>
+            </el-form-item>
+          </el-form>
+          <!-- 取消和确认按钮 -->
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="editDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editUser">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -148,6 +171,15 @@ export default {
             trigger: 'blur'
           }
         ]
+      },
+      // 控制编辑用户的模态框显示 默认值false
+      editDialogVisible: false,
+      // 编辑表单的数据
+      editForm: {
+        id: '',
+        email: '',
+        mobile: '',
+        username: ''
       }
     }
   },
@@ -270,6 +302,36 @@ export default {
             this.addDialogVisible = false
             // 清空表单内容
             this.$refs.addForm.resetFields()
+          }
+        })
+      })
+    },
+    // 显示修改的对话框
+    showEditDialog(user) {
+      this.editDialogVisible = true
+      // 让数据回显,把user的值(name,emli,手机)显示在表单中
+      this.editForm.id = user.id
+      this.editForm.username = user.username
+      this.editForm.email = user.email
+      this.editForm.mobile = user.mobile
+    },
+    // 修改用户
+    editUser() {
+      this.$refs.editForm.validate(valid => {
+        if (!valid) return false
+        this.axios({
+          method: 'put',
+          url: `users/${this.editForm.id}`,
+          data: this.editForm
+        }).then(res => {
+          let { meta: { status } } = res
+          if (status === 200) {
+            // 渲染页面
+            this.getUserList()
+            // 重置表单
+            this.$refs.editForm.resetFields()
+            // 隐藏模态框
+            this.editDialogVisible = false
           }
         })
       })
