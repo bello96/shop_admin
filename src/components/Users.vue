@@ -10,7 +10,7 @@
           <el-input placeholder="请输入关键字" @keyup.enter.native="search" v-model="query" class="input-with-select">
             <el-button slot="append" icon="el-icon-search" @click='search'></el-button>
           </el-input>
-          <el-button type="success" plain>添加用户</el-button>
+          <el-button type="success" plain @click="showAddModal">添加用户</el-button>
         </div>
         <!-- 表格展示 -->
         <el-table
@@ -70,6 +70,36 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
+
+        <!-- 添加用户模态框 -->
+        <!-- el-dialog: 对话框组件 -->
+        <!-- visible.sync: 显示对话款 -->
+        <!-- width: 对话款的宽度 -->
+        <el-dialog
+          title="添加用户"
+          :visible.sync="addDialogVisible"
+          width="40%">
+          <!-- 添加用户的表单 -->
+          <el-form ref="addForm" :model="addForm" :rules="rules" status-icon label-width="80px">
+            <el-form-item label="用户名" prop="username">
+              <el-input placeholder="请输入用户名" v-model="addForm.username"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input placeholder="请输入密码" v-model="addForm.password"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input placeholder="请输入邮箱" v-model="addForm.email"></el-input>
+            </el-form-item>
+            <el-form-item label="电话" prop="mobile">
+              <el-input placeholder="请输入电话" @keyup.enter.native="addUser" v-model="addForm.mobile"></el-input>
+            </el-form-item>
+          </el-form>
+          <!-- 取消和确认按钮 -->
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="addDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addUser">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -88,7 +118,37 @@ export default {
       // 总条数
       total: 0,
       // 用户列表的数据
-      userList: []
+      userList: [],
+      // 控制添加用户的模态框显示  默认值 false
+      addDialogVisible: false,
+      // 手机添加用户数据
+      addForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      // 表单的校验规则
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 9, message: '长度在 3 到 9 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { type: 'email', message: '请输入正确格式邮箱', trigger: 'blur' }
+        ],
+        mobile: [
+          {
+            pattern: /^1\d{10}$/,
+            message: '请输入正确的手机号',
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   methods: {
@@ -183,6 +243,35 @@ export default {
         } else {
           this.$message.error('修改状态失败')
         }
+      })
+    },
+    // 显示添加用户表单
+    showAddModal() {
+      this.addDialogVisible = true
+    },
+    // 点击确认添加用户
+    addUser() {
+      this.$refs.addForm.validate(valid => {
+        if (!valid) return false
+        // 成功
+        this.axios({
+          method: 'post',
+          url: 'users',
+          data: this.addForm
+        }).then(res => {
+          let { meta: { status } } = res
+          if (status === 201) {
+            // 重新渲染最后一页
+            this.total++
+            this.currentPage = Math.ceil(this.total / this.pageSize)
+            // 重新渲染
+            this.getUserList()
+            // 隐藏模态框
+            this.addDialogVisible = false
+            // 清空表单内容
+            this.$refs.addForm.resetFields()
+          }
+        })
       })
     }
   },
